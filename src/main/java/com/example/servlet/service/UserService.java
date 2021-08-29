@@ -1,5 +1,6 @@
 package com.example.servlet.service;
 
+import com.example.servlet.entity.Md5;
 import com.example.servlet.entity.Result;
 import com.example.servlet.entity.User;
 import com.example.servlet.mapper.UserMapper;
@@ -63,11 +64,76 @@ public class UserService {
                 user.setId(userId);
                 User userById = userMapper.findUserById(userId);
                 result.setDetail(userById);
+                String login_token=Md5.vanilla_encrypt(userId.toString());
+//                System.out.println(login_token);
+                result.setToken(login_token);
             }
 
         }catch (Exception e){
             result.setMsg(e.getMessage());
             e.printStackTrace();
+        }
+        return result;
+    }
+
+    public Result mod_selfie(String token, int num) {
+        Result result=new Result();
+        result.setSuccess(false);
+        String username=Md5.vanilla_decrypt(token);
+        User user= userMapper.findUserByName(username);
+        if(user==null)
+        {
+            result.setMsg("user not exists");
+        }
+        else {
+            if(num>0&&num<=User.selfie_num)
+            {
+                userMapper.mod_selfie(username,num);
+                result.setMsg("selfie modified");
+                result.setSuccess(true);
+            }
+            else{
+                result.setMsg("no matched selfie");
+            }
+        }
+        return result;
+    }
+
+    public Result mod_nickname(String token, String nickname) {
+        Result result=new Result();
+        result.setSuccess(false);
+        String username=Md5.vanilla_decrypt(token);
+        User user= userMapper.findUserByName(username);
+        if(user==null)
+        {
+            result.setMsg("user not exists");
+        }
+        else {
+            if(nickname.length()<100)
+            {
+                userMapper.mod_nickname(username,nickname);
+                result.setMsg("nickname modified");
+                result.setSuccess(true);
+            }
+            else{
+                result.setMsg("illegal nickname");
+            }
+        }
+        return result;
+    }
+
+    public Result get_userinfo(String token) {
+        Result result=new Result();
+        result.setSuccess(false);
+        String userId=Md5.vanilla_decrypt(token);
+        User user= userMapper.findUserById(Long.valueOf(userId));
+        if(user==null)
+        {
+            result.setMsg("user not exists");
+        }
+        else {
+            result.setDetail(user);
+            result.setSuccess(true);
         }
         return result;
     }

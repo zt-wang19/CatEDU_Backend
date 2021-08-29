@@ -35,4 +35,10 @@ public interface UserMapper {
      */
     @Select("select u.id from usermessage u where u.username=#{username} and password=#{password}")
     Long login(User user);
+
+    @Update("update usermessage set selfie=#{num} where username=#{username}")
+    void mod_selfie(String username, int num);
+
+    @Update("update usermessage set nickname=#{nickname} where username=#{username}")
+    void mod_nickname(String username, String nickname);
 }

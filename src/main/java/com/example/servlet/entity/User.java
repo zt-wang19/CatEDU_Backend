@@ -7,6 +7,25 @@ public class User {
     private String username;
     private String password;
     private String email;
+    private String nickname;
+    private int selfie;
+    static public int selfie_num=11;
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public int getSelfie() {
+        return selfie;
+    }
+
+    public void setSelfie(int selfie) {
+        this.selfie = selfie;
+    }
 
     public User() {
     }

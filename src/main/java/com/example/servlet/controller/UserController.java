@@ -4,10 +4,7 @@ import com.example.servlet.entity.Result;
 import com.example.servlet.entity.User;
 import com.example.servlet.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("user")
@@ -29,5 +26,20 @@ public class UserController {
     @PostMapping("/login")
     public Result login(@RequestBody User user) {
         return userService.login(user);
+    }
+
+    @PostMapping("/modify/selfie")
+    public Result mod_selfie(String token, int num){
+        return userService.mod_selfie(token,num);
+    }
+
+    @PostMapping("/modify/nickname")
+    public Result mod_nickname(String token, String nickname){
+        return userService.mod_nickname(token,nickname);
+    }
+
+    @PostMapping("/info")
+    public Result get_userinfo(@RequestParam("token") String token){
+        return userService.get_userinfo(token);
     }
 }

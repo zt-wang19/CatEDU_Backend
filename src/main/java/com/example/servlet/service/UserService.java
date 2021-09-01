@@ -4,9 +4,11 @@ import com.example.servlet.entity.Md5;
 import com.example.servlet.entity.Result;
 import com.example.servlet.entity.User;
 import com.example.servlet.mapper.UserMapper;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 @Service
@@ -76,19 +78,23 @@ public class UserService {
         return result;
     }
 
-    public Result mod_selfie(String token, int num) {
+    public Result mod_selfie(String requestBody) {
+        HashMap<String,String> map= new HashMap<>();
+        map=new Gson().fromJson(requestBody,map.getClass());
+        String token=map.get("token");
+        Integer selfie= Integer.valueOf(map.get("selfie"));
         Result result=new Result();
         result.setSuccess(false);
         String username=Md5.vanilla_decrypt(token);
-        User user= userMapper.findUserByName(username);
+        User user= userMapper.findUserById(Long.valueOf(username));
         if(user==null)
         {
             result.setMsg("user not exists");
         }
         else {
-            if(num>0&&num<=User.selfie_num)
+            if(selfie>0&&selfie<13)
             {
-                userMapper.mod_selfie(username,num);
+                userMapper.mod_selfie(user.getUsername(),selfie);
                 result.setMsg("selfie modified");
                 result.setSuccess(true);
             }
@@ -99,11 +105,15 @@ public class UserService {
         return result;
     }
 
-    public Result mod_nickname(String token, String nickname) {
+    public Result mod_nickname(String requestBody) {
+        HashMap<String,String> map= new HashMap<>();
+        map=new Gson().fromJson(requestBody,map.getClass());
+        String token=map.get("token");
+        String nickname=map.get("nickname");
         Result result=new Result();
         result.setSuccess(false);
         String username=Md5.vanilla_decrypt(token);
-        User user= userMapper.findUserByName(username);
+        User user= userMapper.findUserById(Long.valueOf(username));
         if(user==null)
         {
             result.setMsg("user not exists");
@@ -111,12 +121,41 @@ public class UserService {
         else {
             if(nickname.length()<100)
             {
-                userMapper.mod_nickname(username,nickname);
+                userMapper.mod_nickname(user.getUsername(),nickname);
                 result.setMsg("nickname modified");
                 result.setSuccess(true);
             }
             else{
                 result.setMsg("illegal nickname");
+            }
+        }
+        return result;
+    }
+    public Result mod_email(String requestBody) {
+        HashMap<String,String> map= new HashMap<>();
+        map=new Gson().fromJson(requestBody,map.getClass());
+        String token=map.get("token");
+        String email=map.get("email");
+        Result result=new Result();
+        result.setSuccess(false);
+        String username=Md5.vanilla_decrypt(token);
+        User user= userMapper.findUserById(Long.valueOf(username));
+        boolean flag=true;
+        String email_pattern = "^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$";
+        flag = Pattern.matches(email_pattern, email);
+        if(user==null)
+        {
+            result.setMsg("user not exists");
+        }
+        else {
+            if(flag)
+            {
+                userMapper.mod_email(user.getUsername(),email);
+                result.setMsg("email modified");
+                result.setSuccess(true);
+            }
+            else{
+                result.setMsg("illegal email");
             }
         }
         return result;

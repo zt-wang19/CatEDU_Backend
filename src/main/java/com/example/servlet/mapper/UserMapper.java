@@ -41,4 +41,7 @@ public interface UserMapper {
 
     @Update("update usermessage set nickname=#{nickname} where username=#{username}")
     void mod_nickname(String username, String nickname);
+
+    @Update("update usermessage set email=#{email} where username=#{username}")
+    void mod_email(String username, String email);
 }

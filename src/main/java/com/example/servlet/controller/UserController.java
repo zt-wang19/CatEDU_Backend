@@ -29,13 +29,17 @@ public class UserController {
     }
 
     @PostMapping("/modify/selfie")
-    public Result mod_selfie(String token, int num){
-        return userService.mod_selfie(token,num);
+    public Result mod_selfie(@RequestBody String requestBody){
+        return userService.mod_selfie(requestBody);
     }
 
     @PostMapping("/modify/nickname")
-    public Result mod_nickname(String token, String nickname){
-        return userService.mod_nickname(token,nickname);
+    public Result mod_nickname(@RequestBody String requestBody){
+        return userService.mod_nickname(requestBody);
+    }
+    @PostMapping("/modify/email")
+    public Result mod_email(@RequestBody String requestBody){
+        return userService.mod_email(requestBody);
     }
 
     @PostMapping("/info")

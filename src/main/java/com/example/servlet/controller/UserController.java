@@ -1,7 +1,6 @@
 package com.example.servlet.controller;
 
-import com.example.servlet.entity.Result;
-import com.example.servlet.entity.User;
+import com.example.servlet.entity.*;
 import com.example.servlet.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,12 +11,40 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    /**
-     * 注册
-     *
-     * @param user
-     * @return
-     */
+    @PostMapping("/getHistoryCloud")
+    public Result getHistoryCloud(@RequestBody String requestBody){
+        return userService.getHistoryCloud(requestBody);
+    }
+    @PostMapping("/searchStars")
+    public Result searchStars(@RequestBody String requestBody){
+        return userService.searchStars(requestBody);
+    }
+    @PostMapping("/getStars")
+    public Result getStars(@RequestBody String requestBody){
+//        stars.setUserId(Long.valueOf(Md5.vanilla_decrypt(stars.getToken())));
+        return userService.getStars(requestBody);
+    }
+    @PostMapping("/addStars")
+    public Result addStars(@RequestBody Stars stars){
+        stars.setUserId(Long.valueOf(Md5.vanilla_decrypt(stars.getToken())));
+        return userService.addStars(stars);
+    }
+    @PostMapping("/rmStars")
+    public Result rmStars(@RequestBody Stars stars){
+        stars.setUserId(Long.valueOf(Md5.vanilla_decrypt(stars.getToken())));
+        return userService.rmStars(stars);
+    }
+
+    @PostMapping("/getHistory")
+    public Result getHistory(@RequestBody String requestBody){
+        return userService.getHistory(requestBody);
+    }
+    @PostMapping("/addHistory")
+    public Result addHistory(@RequestBody History history){
+        history.setUserId(Long.valueOf(Md5.vanilla_decrypt(history.getToken())));
+        return userService.addHistory(history);
+    }
+
     @PostMapping("/register")
     public Result register(@RequestBody User user) {
         return userService.register(user);

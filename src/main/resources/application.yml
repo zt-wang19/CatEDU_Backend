@@ -2,7 +2,7 @@ spring:
   datasource:
     #   数据源基本配置
     username: root
-    password:
+    password: Wzt107210!
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/userinfo?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     type: com.alibaba.druid.pool.DruidDataSource
